@@ -1,0 +1,19 @@
+{
+  "name": "screensaver",
+  "version": "1.0.0",
+  "description": "Random project to know how to make object move using canvas AOU",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\\"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "live-server": "^1.2.2"
+  }
+}
