@@ -2,8 +2,11 @@ console.log('It is loading. Yello')
 
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-canvas.width = 1200;
-canvas.height = 400;
+
+let windowWidth = window.innerWidth;
+let windowHeight = window.window.innerHeight;
+canvas.width = windowWidth;
+canvas.height = windowHeight;
 
 let cat = {
     img: new Image(),
@@ -12,56 +15,59 @@ let cat = {
     xPos: 0,
     yPos: 0,
     // speed
-    xSpeed: 10,
-    ySpeed: 10,
+    xSpeed: 3,
+    ySpeed: 3,
 
     //imgsize
-    catWidth: 100,
+    catWidth: 120,
     catHeight: 150,
 };
 
 cat.img.src = "./dumbcat.png";
 
-cat.img.onload = () => {
-    ctx.drawImage(
-    cat.img,
-    cat.xPos, 
-    cat.yPos, 
-    cat.catWidth, 
-    cat.catHeight
-    );
 
-    ctx.globalCompositeOperation = "saturation";
-ctx.fillStyle = "hsl(0," + 0 + "%, 50%)";  // hue doesn't matter here
-ctx.fillRect(0, 0);
-
-// step 3: adjust hue, preserve luma and chroma
-ctx.globalCompositeOperation = "hue";
-ctx.fillStyle = "hsl(" + 10 + ",1%, 50%)";  // sat must be > 0, otherwise won't matter
-    ctx.fillRect(0, 0, cat.catWidth, cat.catHeight);
-    ctx.globalCompositeOperation('source-in');
-
-    ctx.globalCompositeOperation = "destination-in";
+const drawCat = () =>{
     ctx.drawImage(
         cat.img,
         cat.xPos, 
         cat.yPos, 
         cat.catWidth, 
         cat.catHeight
-        );
+    )
+};
+
+let xBounce = false;
+let yBounce = false;
 
 
-        ctx.globalCompositeOperation = "source-over";
-    
-    
+const moveCatPos = ()=>{
+    //clear previous cat
+    ctx.clearRect(0, 0, windowWidth, windowHeight);
+    checkBounce();
+    cat.xPos += cat.xSpeed;
+    cat.yPos += cat.ySpeed;
+    drawCat();
+
+   
+}
+
+const checkBounce = ()=>{    
+    //detect bounce for x
+    if(cat.xPos >= windowWidth - cat.catWidth || cat.xPos < 0){
+        cat.xSpeed *= -1;
+    }
+    //detect bounce for y
+    if(cat.yPos >= windowHeight - cat.catHeight || cat.yPos < 0){
+        cat.ySpeed *= -1
+    }
 }
 
 
-
-
-
-
-
-function moveCat(){
-
+const updateCat = ()=>{
+    requestAnimationFrame(updateCat);
+    moveCatPos();
 }
+
+//main functionality
+cat.img.onload = ()=> drawCat();
+updateCat();
