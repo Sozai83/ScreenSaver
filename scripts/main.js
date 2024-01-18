@@ -8,6 +8,11 @@ let windowHeight = window.window.innerHeight;
 canvas.width = windowWidth;
 canvas.height = windowHeight;
 
+//Todo 1 - Resize cat depending on the window size
+//Todo 2 - Adjust speed depending on the window size
+//Todo 3 - Detect change size of the window and adjust
+//Todo 4 - Change color when bouncing
+
 let cat = {
     img: new Image(),
     // position on screen
