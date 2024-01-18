@@ -36,19 +36,18 @@ const drawCat = () =>{
     )
 };
 
-let xBounce = false;
-let yBounce = false;
-
-
-const moveCatPos = ()=>{
+const moveCat = ()=>{
     //clear previous cat
     ctx.clearRect(0, 0, windowWidth, windowHeight);
+
+    //move Cat position
     checkBounce();
     cat.xPos += cat.xSpeed;
     cat.yPos += cat.ySpeed;
+
+    //add Cat at the next position
     drawCat();
 
-   
 }
 
 const checkBounce = ()=>{    
@@ -65,7 +64,7 @@ const checkBounce = ()=>{
 
 const updateCat = ()=>{
     requestAnimationFrame(updateCat);
-    moveCatPos();
+    moveCat();
 }
 
 //main functionality
