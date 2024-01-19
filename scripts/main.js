@@ -8,7 +8,7 @@ let windowHeight = window.window.innerHeight;
 canvas.width = windowWidth;
 canvas.height = windowHeight;
 
-//Todo 1 - Resize cat depending on the window size
+//Todo 1 - Resize cat depending on the window size > Need to check by deploying this online
 //Todo 2 - Adjust speed depending on the window size
 //Todo 3 - Detect change size of the window and adjust
 //Todo 4 - Change color when bouncing
@@ -20,8 +20,8 @@ let cat = {
     xPos: 0,
     yPos: 0,
     // speed
-    xSpeed: 3,
-    ySpeed: 3,
+    xSpeed: 5,
+    ySpeed: 5,
 
     //imgsize
     catWidth: 120,
@@ -30,6 +30,17 @@ let cat = {
 
 cat.img.src = "./dumbcat.png";
 
+let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? true : false;
+
+const checkMobile = ()=>{
+    const mobileScale = 0.5
+    if(isMobile){
+        catWidth *= mobileScale;
+        catHeight *= mobileScale;
+        xSpeed *= mobileScale;
+        ySpeed *= mobileScale;
+    }
+}
 
 const drawCat = () =>{
     ctx.drawImage(
