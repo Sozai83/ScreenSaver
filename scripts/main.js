@@ -8,9 +8,9 @@ let windowWidth,
     isMobile,
     isSmallWindow,
     adjSize,
-    adjSpeed
-
-//Todo 4 - Change color when bouncing
+    adjSpeed,
+    fillColorWidth,
+    fillColorHeight
 
 let cat = {
     img: new Image(),
@@ -19,12 +19,14 @@ let cat = {
     xPos: 0,
     yPos: 0,
     // speed
-    xSpeed: 10,
-    ySpeed: 10,
+    xSpeed: 8,
+    ySpeed: 8,
 
     //imgsize
     catWidth: 200,
     catHeight: 240,
+
+    catColor: '#000000'
 };
 
 cat.img.src = "./dumbcat.png";
@@ -34,6 +36,8 @@ const setCanvasSize = ()=>{
     windowHeight = window.window.innerHeight;
     canvas.width = windowWidth;
     canvas.height = windowHeight;
+    fillColorWidth = ctx.canvas.width;
+    fillColorHeight = ctx.canvas.height
 }
 
 const adjScale = ()=>{
@@ -44,6 +48,15 @@ const adjScale = ()=>{
 
 
 const drawCat = () =>{
+    setCanvasSize();
+    adjScale();
+
+    //add color
+    ctx.fillStyle = cat.catColor;
+    ctx.fillRect(0 ,0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'destination-in';
+
+    //draw a dumb cat
     ctx.drawImage(
         cat.img,
         cat.xPos, 
@@ -51,6 +64,7 @@ const drawCat = () =>{
         cat.catWidth * adjSize, 
         cat.catHeight * adjSize, 
     );
+    
 };
 
 const moveCat = ()=>{
@@ -67,14 +81,21 @@ const moveCat = ()=>{
     cat.yPos += cat.ySpeed * adjSpeed;
 }
 
+const setCatColor = ()=>{
+    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    cat.catColor = randomColor;
+}
+
 const checkBounce = ()=>{    
     //detect bounce for x
     if(cat.xPos >= windowWidth - cat.catWidth * adjSize  || cat.xPos < 0){
         cat.xSpeed *= -1;
+        setCatColor();
     }
     //detect bounce for y
     if(cat.yPos >= windowHeight - cat.catHeight * adjSize || cat.yPos < 0){
-        cat.ySpeed *= -1
+        cat.ySpeed *= -1;
+        setCatColor();
     }
 }
 
@@ -86,8 +107,6 @@ const updateCat = ()=>{
 
 //main functionality
 const main = ()=>{
-    setCanvasSize();
-    adjScale();
     cat.img.onload = ()=> drawCat();
     updateCat();
 }
