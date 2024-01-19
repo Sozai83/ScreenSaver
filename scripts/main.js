@@ -3,14 +3,13 @@ console.log('It is loading. Yello')
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-let windowWidth = window.innerWidth;
-let windowHeight = window.window.innerHeight;
-canvas.width = windowWidth;
-canvas.height = windowHeight;
+let windowWidth,
+    windowHeight,
+    isMobile,
+    isSmallWindow,
+    adjSize,
+    adjSpeed
 
-//Todo 1 - Resize cat depending on the window size > Need to check by deploying this online
-//Todo 2 - Adjust speed depending on the window size
-//Todo 3 - Detect change size of the window and adjust
 //Todo 4 - Change color when bouncing
 
 let cat = {
@@ -20,36 +19,38 @@ let cat = {
     xPos: 0,
     yPos: 0,
     // speed
-    xSpeed: 5,
-    ySpeed: 5,
+    xSpeed: 10,
+    ySpeed: 10,
 
     //imgsize
-    catWidth: 120,
-    catHeight: 150,
+    catWidth: 200,
+    catHeight: 240,
 };
 
 cat.img.src = "./dumbcat.png";
 
-let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? true : false;
-
-const checkMobile = ()=>{
-    const mobileScale = 0.5
-    if(isMobile){
-        catWidth *= mobileScale;
-        catHeight *= mobileScale;
-        xSpeed *= mobileScale;
-        ySpeed *= mobileScale;
-    }
+const setCanvasSize = ()=>{
+    windowWidth = window.innerWidth;
+    windowHeight = window.window.innerHeight;
+    canvas.width = windowWidth;
+    canvas.height = windowHeight;
 }
+
+const adjScale = ()=>{
+    isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) ? true : false;
+    isSmallWindow = window.innerWidth <= 1200 || window.innerHeight <= 800 ? true : false;
+    [adjSize, adjSpeed] = isMobile ? [0.4, 0.6] : isSmallWindow ? [0.7, 0.7] : [1,1];
+}
+
 
 const drawCat = () =>{
     ctx.drawImage(
         cat.img,
         cat.xPos, 
         cat.yPos, 
-        cat.catWidth, 
-        cat.catHeight
-    )
+        cat.catWidth * adjSize, 
+        cat.catHeight * adjSize, 
+    );
 };
 
 const moveCat = ()=>{
@@ -58,21 +59,21 @@ const moveCat = ()=>{
 
     //move Cat position
     checkBounce();
-    cat.xPos += cat.xSpeed;
-    cat.yPos += cat.ySpeed;
 
     //add Cat at the next position
     drawCat();
 
+    cat.xPos += cat.xSpeed * adjSpeed;
+    cat.yPos += cat.ySpeed * adjSpeed;
 }
 
 const checkBounce = ()=>{    
     //detect bounce for x
-    if(cat.xPos >= windowWidth - cat.catWidth || cat.xPos < 0){
+    if(cat.xPos >= windowWidth - cat.catWidth * adjSize  || cat.xPos < 0){
         cat.xSpeed *= -1;
     }
     //detect bounce for y
-    if(cat.yPos >= windowHeight - cat.catHeight || cat.yPos < 0){
+    if(cat.yPos >= windowHeight - cat.catHeight * adjSize || cat.yPos < 0){
         cat.ySpeed *= -1
     }
 }
@@ -84,5 +85,24 @@ const updateCat = ()=>{
 }
 
 //main functionality
-cat.img.onload = ()=> drawCat();
-updateCat();
+const main = ()=>{
+    setCanvasSize();
+    adjScale();
+    cat.img.onload = ()=> drawCat();
+    updateCat();
+}
+
+
+//detect window resize
+window.addEventListener("resize", function(event) {
+    setCanvasSize();
+    adjScale();
+    
+    //if the cat is outside of the current window, start from 0
+    if(cat.xPos >= windowWidth - cat.catWidth || cat.yPos >= windowHeight - cat.catHeight){
+        cat.xPos = 0;
+        cat.yPos = 0;
+    } 
+})
+
+main();
