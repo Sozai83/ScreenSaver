@@ -55,7 +55,7 @@ const drawCat = () =>{
     ctx.fillStyle = cat.catColor;
     ctx.fillRect(0 ,0, canvas.width, canvas.height);
     ctx.globalCompositeOperation = 'destination-in';
-
+   
     //draw a dumb cat
     ctx.drawImage(
         cat.img,
@@ -63,7 +63,7 @@ const drawCat = () =>{
         cat.yPos, 
         cat.catWidth * adjSize, 
         cat.catHeight * adjSize, 
-    );
+    );    
     
 };
 
@@ -82,8 +82,15 @@ const moveCat = ()=>{
 }
 
 const setCatColor = ()=>{
-    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
-    cat.catColor = randomColor;
+    let randomColor = '#'
+    const rangeSize = 20; // adapt as needed
+    const parts = [
+        Math.floor(Math.random()*256),
+        Math.floor(Math.random()*rangeSize),
+        Math.floor(Math.random()*rangeSize)
+    ].sort( (a, b) => Math.random() < 0.5 );
+
+    cat.catColor = randomColor + parts.map(p => p.toString(16).padStart(2, "0")).join('');
 }
 
 const checkBounce = ()=>{    
