@@ -83,7 +83,7 @@ const moveCat = ()=>{
 
 const setCatColor = ()=>{
     let randomColor = '#'
-    const rangeSize = 20; // adapt as needed
+    const rangeSize = 40; // adapt as needed
     const parts = [
         Math.floor(Math.random()*256),
         Math.floor(Math.random()*rangeSize),
